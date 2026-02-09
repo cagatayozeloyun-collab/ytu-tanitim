@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geleceğin Beyni | YTÜ Kontrol ve Otomasyon</title>
+    <style>
+        /* --- GENEL AYARLAR (HACKER TEMASI) --- */
+        :root {
+            --bg-color: #050505;
+            --text-color: #e0e0e0;
+            --accent-color: #00ff41; /* Matrix Yeşili */
+            --secondary-color: #008f11;
+            --card-bg: #111;
+            --error-color: #ff0055;
+        }
+
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            overflow-x: hidden; /* Yatay kaydırmayı engelle */
+        }
+
+        a { color: var(--accent-color); text-decoration: none; }
+        
+        /* --- HEADER / GİRİŞ --- */
+        header {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: radial-gradient(circle, #1a1a1a 0%, #000 100%);
+            border-bottom: 2px solid var(--accent-color);
+            position: relative;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            margin: 0;
+            text-shadow: 0 0 15px var(--accent-color);
+            letter-spacing: -2px;
+        }
+
+        h2 { font-size: 1.5rem; color: var(--secondary-color); margin-top: 10px; }
+
+        .typing-effect {
+            border-right: 2px solid var(--accent-color);
+            white-space: nowrap;
+            overflow: hidden;
+            animation: blink 0.75s step-end infinite;
+        }
+
+        @keyframes blink { 50% { border-color: transparent; } }
+
+        .btn {
+            margin-top: 2rem;
+            padding: 15px 40px;
+            border: 2px solid var(--accent-color);
+            color: var(--accent-color);
+            background: transparent;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: inherit;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .btn:hover {
+            background: var(--accent-color);
+            color: #000;
+            box-shadow: 0 0 30px var(--accent-color);
+        }
+
+        /* --- BÖLÜMLER GENEL --- */
+        section {
+            padding: 4rem 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            border-bottom: 1px solid var(--secondary-color);
+            padding-bottom: 10px;
+            margin-bottom: 40px;
+            color: var(--accent-color);
+        }
+
+        /* --- KART YAPISI (GRID) --- */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid #333;
+            padding: 25px;
+            border-radius: 5px;
+            transition: transform 0.3s, border-color 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-color);
+            box-shadow: 0 5px 15px rgba(0, 255, 65, 0.1);
+        }
+
+        .card h3 { color: var(--accent-color); margin-top: 0; font-size: 1.3rem; }
+
+        /* --- MATEMATİK / PID KUTULARI --- */
+        .math-box {
+            background: #0f0f0f;
+            border-left: 4px solid var(--accent-color);
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        /* --- AKORDİYON (DERS LİSTESİ) --- */
+        .accordion { margin-top: 20px; }
+        
+        .course-btn {
+            background-color: #111;
+            color: var(--text-color);
+            cursor: pointer;
+            padding: 20px;
+            width: 100%;
+            text-align: left;
+            border: 1px solid #333;
+            outline: none;
+            transition: 0.3s;
+            font-family: inherit;
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .course-btn:after { content: '+'; font-size: 1.5rem; }
+        .course-btn.active:after { content: '-'; }
+
+        .active, .course-btn:hover {
+            background-color: var(--secondary-color);
+            color: #fff;
+            border-color: var(--accent-color);
+        }
+
+        .course-content {
+            padding: 0 20px;
+            background-color: #0a0a0a;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            border-left: 2px solid var(--accent-color);
+        }
+
+        .course-content p { margin: 15px 0; color: #bbb; }
+
+        /* --- FOOTER --- */
+        footer {
+            text-align: center;
+            padding: 3rem;
+            background: #000;
+            border-top: 1px solid var(--secondary-color);
+            color: #555;
+            margin-top: 50px;
+        }
+
+        /* MOBİL UYUM */
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            section { padding: 2rem 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>GELECEĞİN BEYNİ</h1>
+        <h2>YTÜ Kontrol ve Otomasyon Mühendisliği</h2>
+        <p class="typing-effect" style="margin-top: 20px; font-size: 1.2rem;">
+            &lt; Makine + Elektrik + Yazılım = BİZ /&gt;
+        </p>
+        <a href="#nedir" class="btn">Sisteme Giriş Yap</a>
+    </header>
+
+    <section id="nedir">
+        <h2 class="section-title">01_Nedir Bu Bölüm?</h2>
+        <p style="font-size: 1.2rem;">Bir arabanın motorunu makineci yapar. Farlarını elektrikçi bağlar. Ama o arabanın <strong>kendi kendine park etmesini</strong>, şeritte kalmasını, yani "karar vermesini" biz sağlarız. Biz sistemlerin beynini kodlarız.</p>
+        
+        <div class="grid" style="margin-top: 40px;">
+            <div class="card">
+                <h3>🚗 Otomotiv</h3>
+                <p>TOGG, Tesla, Ford... Otonom sürüş algoritmaları, batarya yönetim sistemleri ve araç içi zeka.</p>
+            </div>
+            <div class="card">
+                <h3>✈️ Savunma Sanayi</h3>
+                <p>Baykar, TUSAŞ... İHA'ların havada sabit kalmasını sağlayan otopilot yazılımları.</p>
+            </div>
+            <div class="card">
+                <h3>🏭 Akıllı Fabrikalar</h3>
+                <p>Robot kollar, üretim bantları ve "Karanlık Fabrikalar" (insansız üretim).</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="gercekler">
+        <h2 class="section-title">02_Lisedeki "Bela" Konular</h2>
+        <p>Hani "Hocam integral gerçek hayatta ne işimize yarayacak?" diyordunuz ya... İşte cevabı:</p>
+
+        <div class="math-box">
+            <h3>Hız Sabitleyici (Cruise Control) & PID</h3>
+            <p>Arabanı 100 km/h hıza sabitledin. Yokuş yukarı gelince hız düştü.</p>
+            <ul style="list-style: none; padding: 0;">
+                <li>🔴 <strong>P (Oransal):</strong> "Hız düştü, gaza bas!" der. (Acemi şoför)</li>
+                <li>🔵 <strong>I (İntegral):</strong> "Hata birikiyor, araç bayılıyor, daha çok güç ver!" der. (Lisedeki alan hesabı burada güç hesabı olur).</li>
+                <li>🟢 <strong>D (Türev):</strong> "Çok hızlı geldin, yokuş bitiyor, gazı kes!" der. (Geleceği görür).</li>
+            </ul>
+            <p style="color: var(--error-color); font-weight: bold;">Sonuç: PID (Türev/İntegral) olmadan otonom sürüş OLMAZ.</p>
+        </div>
+
+        <div class="math-box">
+            <h3>Laplace Dönüşümü (Mühendislik Hilesi)</h3>
+            <p>Diferansiyel denklemlerle uğraşmak zordur. Biz <span style="color:var(--accent-color)">Laplace</span> kullanarak denklemleri "s-Dünyası"na taşırız. Orada türev yoktur, sadece çarpma/toplama vardır. Zoru kolaya çevirmek mühendislik zekasıdır.</p>
+        </div>
+    </section>
+
+    <section id="dersler">
+        <h2 class="section-title">03_Yüklenen Yazılımlar (Dersler)</h2>
+        <p>Bölümde beynine yüklenecek yetenek paketleri. Detay için tıkla:</p>
+
+        <div class="accordion">
+            <div class="course-item">
+                <button class="course-btn">1. YIL: Temel Donanım Kurulumu</button>
+                <div class="course-content">
+                    <p><strong>Dersler:</strong> Matematik 1-2, Fizik 1-2, Lineer Cebir.</p>
+                    <p><strong>Gerçek Hayat:</strong> Mühendisliğin alfabesi. Türev olmadan hız değişimi, İntegral olmadan enerji hesabı, Lineer Cebir olmadan robot kolu hareketi hesaplanamaz.</p>
+                </div>
+            </div>
+
+            <div class="course-item">
+                <button class="course-btn">2. YIL: Elektriğin Efendisi</button>
+                <div class="course-content">
+                    <p><strong>Dersler:</strong> Devre Analizi, Elektronik 1-2, Diferansiyel Denklemler.</p>
+                    <p><strong>Gerçek Hayat:</strong> Bir devre kartına baktığında "buradan akım geçer, şurada voltaj düşer" demeyi öğrenirsin. Transistörlerle sinyal işlersin.</p>
+                </div>
+            </div>
+
+            <div class="course-item">
+                <button class="course-btn">3. YIL: Kritik Dönemeç (CORE)</button>
+                <div class="course-content">
+                    <p><strong>Dersler:</strong> Sinyaller ve Sistemler, Otomatik Kontrol, Elektrik Makineleri.</p>
+                    <p><strong>Gerçek Hayat:</strong> Bölümün kalbi. Gürültülü sinyalleri filtrelemeyi (Sinyaller), sistemleri kararlı hale getirmeyi (PID Kontrol) öğrenirsin. Buradan sağ çıkan mühendis olur.</p>
+                </div>
+            </div>
+
+            <div class="course-item">
+                <button class="course-btn">4. YIL: Uzmanlaşma & Şov</button>
+                <div class="course-content">
+                    <p><strong>Dersler:</strong> PLC Otomasyon, Robotik, Proses Kontrol, Yapay Zeka.</p>
+                    <p><strong>Gerçek Hayat:</strong> Fabrikaları yöneten PLC kodlarını yazar, robot kolların kinematiğini hesaplar ve bitirme projenle imzanı atarsın.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="ytu">
+        <h2 class="section-title">04_Neden Yıldız Teknik?</h2>
+        
+        <div class="grid">
+            <div class="card">
+                <h3>🧪 Omron Laboratuvarı Farkı</h3>
+                <p>Biz sadece tahtada ders işlemeyiz. Okulda, sanayide kullanılan gerçek <strong>PLC cihazlarıyla (Omron)</strong> eğitim alırız. Stajda diğer üniversiteliler cihaza bakarken, sen programlarsın. Fark budur.</p>
+            </div>
+            <div class="card">
+                <h3>🤝 Network & Kariyer</h3>
+                <p>"Teknik Üniversite" etiketi sanayide kapıları açar. YTÜ mezunları (abimden biliyorum) sektörde birbirini tutar ve kollar.</p>
+            </div>
+            <div class="card">
+                <h3>🎓 Sosyal Hayat</h3>
+                <p>Davutpaşa kampüsünün doğası, şenlikler ve kulüpler (örn. <strong>Atatürkçü Düşünce Topluluğu</strong>) ile sadece teknik değil, sosyal bir lider olursun.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p style="font-size: 1.5rem; color: var(--text-color); margin-bottom: 20px;">#TeknikOlarakYıldızBizim</p>
+        <p>&copy; 2026 YTÜ Kontrol ve Otomasyon Tanıtım Sayfası</p>
+        <a href="https://github.com/kullaniciadin" target="_blank" class="btn" style="font-size: 0.9rem; padding: 10px 20px; margin-top: 20px;">GitHub Profilim</a>
+    </footer>
+
+    <script>
+        var acc = document.getElementsByClassName("course-btn");
+        var i;
+
+        for (i = 0; i < acc.length; i++) {
+            acc[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                var panel = this.nextElementSibling;
+                if (panel.style.maxHeight) {
+                    panel.style.maxHeight = null;
+                } else {
+                    panel.style.maxHeight = panel.scrollHeight + "px";
+                } 
+            });
+        }
+    </script>
+
+</body>
+</html>
